@@ -8,18 +8,24 @@ These political, social, and economic consequences make the task of predicting t
 
 In order to select the best model four sets of models were trained and the best one was selected based on the validation accuracy ('dev in the figures').
 
+
 ![](https://github.com/pfvbell/president/blob/main/Graph%20of%20Predictors.png)
+
 
 Data Description
 The FiveThirtyEight database was used to get the raw data for all polls conducted from 1980 to 2020 [3]. Some of the polling data from early elections (including 1980 and 1984) was missing and was imputed using a linear regression model based on previous polling results. The US Election Project, from the University of Florida, was used for voter turnout data and demographic data from the electorate, including voting age population and prison population [4]. Election results for each election since 1980, by state, were downloaded from the MIT Election Data Science Lab [5]. The 2020 election results were scraped from the New York Times [6]. The data from the 10 elections from 1980-2016 was split into a training set with 410 observations and a validation set with 100 observations. The test set, with 2020 data, contained 51 observations (all 50 states and Washington, D.C.). The response variable was whether the Democrats had won that state (0=Republican, 1=Democrat). 
 
 Here we see the results from the 2012 election:
+
+
 ![](https://github.com/pfvbell/president/blob/main/2012_results_map.png)
 
 # EDA
 The best predictor, from a t-test analysis, was polls_outcome, which indicated the party favored to win in state-wide opinion polls. However, there was uncertainty associated with polls_outcome. 
 
+
 ![](https://github.com/pfvbell/president/blob/main/2020_polls_dist.png)
+
 
 From the distribution of 2020 polls (above) we can see that some states are more likely to be polled than others. For example, Arizona and Florida were polled more in 2020 than other states, compared to states such as West Virginia and Wyoming. It seems that states where Democrats and Republicans are closer have more polls taken. This makes sense because there is likely to be a greater premium on predicting these swing states. However, in order to gain a baseline model polls were initially averaged for each year and each state. To introduce further information about the accuracy of the polls into the model, we added a new variable, “polls_strike_rate”, which represented the proportion of previous elections (since 1980) that had been correctly predicted by polls for that state. 
 
@@ -27,7 +33,9 @@ Feature selection was based on the train and validation accuracies for different
 
 Here we see the percentage of correct poll outcomes for each state from 1980-2016 (i.e. polls_strike_rate variable for the 2016 election)
 
+
 ![](https://github.com/pfvbell/president/blob/main/strike_rate_map.jpg)
+
 
 Above we can see that polls in some states, such as Florida and North Carolina, Wisconsin, Pennsylvania and Michigan have been less predictive of the outcome of the election compared to polls in other states.
 
@@ -39,18 +47,32 @@ First a logistic regression model was fit. This was the baseline model using one
 Since Lasso had succeeded in simplifying the model, and in doing so improved the accuracy from the unregularised model, Logistic Regression with PCA might also improve the accuracy of the initial baseline logistic regression model by simplifying it. A logistic Regression model using 2 principal components resulted in a validation accuracy of 84% while a logistic regression model using 15 principal components resulted in a validation accuracy of 88%. Though the PCA models performed better than baseline Logistic Regression they did not surpass the Lasso Logistic Regression validation score. Next an optimised KNN was trained. The best K was found to be k=5. However, the validation scores were not as high as they were for the regularised logistic regression or PCA logistic regression.
 
 Here we see the first PCs plotting against eachother:
+
+
 ![](https://github.com/pfvbell/president/blob/main/PCA_division.png)
+
+
+We can also see the amount of predictor variation that each PC cumulatively explains:
+
+![](https://github.com/pfvbell/president/blob/main/PCA%20Variance.png)
+
 
 From the relatively higher performance of the Lasso compared to the unregularized logistic regression we know that preventing overfitting is important to increasing performance. 
 
 # Results and Conclusions
+
+
 ![](https://github.com/pfvbell/president/blob/main/Graph%20of%20Predictors.png)
+
+
 Based on these accuracies Lasso Logistic Regression model was chosen, as its validation  accuracy (91%) was higher than the Random Forest or Neural Network validation scores, even though its training accuracy was not as high as the random Forest training accuracy. The final model chosen was therefore the Lasso model with a final accuracy on the test set of 92.2%.
 
-Lasso Logistic Regression Probabilities of prediction of Republican or Democrat for each state
+Lasso Logistic Regression Probabilities of prediction of Republican or Democrat for each state:
+
 ![](https://github.com/pfvbell/president/blob/main/lasso_preds_map_2.png)
 
-Random Forest Probabilities of prediction of Republican or Democrat for each state
+Random Forest Probabilities of prediction of Republican or Democrat for each state:
+
 ![](https://github.com/pfvbell/president/blob/main/rf_preds_map_2.png)
 
 It is useful to note that the logistic lasso model and neural network models were less secure in their predictions compared to the random forest model. Therefore, the random forest model is more likely to vary when applied to different sets of data. This makes the model overly flexible, which is another reason why lasso logistic regression is preferable as the final model.
