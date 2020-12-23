@@ -12,7 +12,7 @@ In order to select the best model four sets of models were trained and the best 
 ![](https://github.com/pfvbell/president/blob/main/Graph%20of%20Predictors.png)
 
 
-Data Description
+# Data Description
 The FiveThirtyEight database was used to get the raw data for all polls conducted from 1980 to 2020 [3]. Some of the polling data from early elections (including 1980 and 1984) was missing and was imputed using a linear regression model based on previous polling results. The US Election Project, from the University of Florida, was used for voter turnout data and demographic data from the electorate, including voting age population and prison population [4]. Election results for each election since 1980, by state, were downloaded from the MIT Election Data Science Lab [5]. The 2020 election results were scraped from the New York Times [6]. The data from the 10 elections from 1980-2016 was split into a training set with 410 observations and a validation set with 100 observations. The test set, with 2020 data, contained 51 observations (all 50 states and Washington, D.C.). The response variable was whether the Democrats had won that state (0=Republican, 1=Democrat). 
 
 Here we see the results from the 2012 election:
